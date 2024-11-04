@@ -2,5 +2,6 @@ from connect import engine
 from models import BaseModel
 
 
-BaseModel.metadata.create_all(engine)
+def create_tables():
+    BaseModel.metadata.create_all(engine)
 
