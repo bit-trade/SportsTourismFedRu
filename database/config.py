@@ -9,9 +9,9 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self):
-        # postgresql+psycopg://login:pass@localhost:5432/db_name
-        return f'postgresql+psycopg://{self.FSTR_DB_LOGIN}:{self.FSTR_DB_PASS}@{self.FSTR_DB_HOST}:{self.FSTR_DB_PORT}/public'
+        return f'postgresql+psycopg://{self.FSTR_DB_LOGIN}:{self.FSTR_DB_PASS}@{self.FSTR_DB_HOST}:{self.FSTR_DB_PORT}/pereval'
 
     model_config = SettingsConfigDict(env_file='../.env')
+
 
 settings = Settings()
