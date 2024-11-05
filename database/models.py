@@ -18,7 +18,7 @@ class StatusPerevalAdd(Enum):
 class PerevalAdded(BaseModel):
     __tablename__ = 'pereval_added'
     id = Column(Integer, primary_key=True)
-    date_added = Column(DateTime)
+    date_added = Column(DateTime, default=datetime.now)
     raw_data = Column(JSONB)
     images = Column(JSONB)
     moder_status = Column(PgEnum(StatusPerevalAdd, name='moderation_status'), nullable=False, default=StatusPerevalAdd.new)
