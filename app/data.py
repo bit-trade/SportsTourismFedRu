@@ -24,7 +24,7 @@ class PerevalRead(BaseModel):
     moder_status: ModerStatus = ModerStatus.new
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class PerevalAreasAdd(BaseModel):
@@ -38,7 +38,7 @@ class PerevalAreasRead(BaseModel):
     id_parent: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class SprActivTypesAdd(BaseModel):
@@ -50,7 +50,7 @@ class SprActivTypesRead(BaseModel):
     title: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # class PerevalImagesAdd(BaseModel):
 #     img:
