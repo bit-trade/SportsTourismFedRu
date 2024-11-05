@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any
+from typing import Any, Dict
 from datetime import datetime
 from pydantic import BaseModel, Json, Field
 
@@ -12,15 +12,16 @@ class ModerStatus(Enum):
 
 
 class PerevalCreate(BaseModel):
-    raw_data: Json[Any]
-    images: Json[Any]
+    raw_data: Json[Dict]
+    images: Json[Dict]
+    moder_status: ModerStatus = ModerStatus.new
 
 
-class PerevalRead(BaseModel):
+class PerevalResponse(BaseModel):
     id: int
     data_added: datetime
-    raw_data: Json[Any]
-    images: Json[Any]
+    raw_data: Json[Dict]
+    images: Json[Dict]
     moder_status: ModerStatus = ModerStatus.new
 
     class Config:
@@ -32,7 +33,7 @@ class PerevalAreasAdd(BaseModel):
     id_parent: int
 
 
-class PerevalAreasRead(BaseModel):
+class PerevalAreasResponse(BaseModel):
     id: int
     title: str
     id_parent: int
@@ -45,7 +46,7 @@ class SprActivTypesAdd(BaseModel):
     title: str = Field(max_length=20)
 
 
-class SprActivTypesRead(BaseModel):
+class SprActivTypesResponse(BaseModel):
     id: int
     title: str
 
