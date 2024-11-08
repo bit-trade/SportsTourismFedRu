@@ -53,6 +53,6 @@ class SprActivTypesResponse(BaseModel):
     class Config:
         from_attributes = True
 
-# class PerevalImagesAdd(BaseModel):
-#     img:
+class PerevalImagesAdd(BaseModel):
+    pass
 

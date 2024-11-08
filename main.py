@@ -9,7 +9,7 @@ pereval = FastAPI()
 
 @pereval.get("/")
 async def get_home():
-   return {"Hello": "World"}
+   return {"Service": "OK"}
 
 @pereval.post('/pereval/', response_model=PerevalResponse)
 async def submit_data(passage: PerevalCreate, db: Session = Depends(get_db)):
@@ -17,5 +17,4 @@ async def submit_data(passage: PerevalCreate, db: Session = Depends(get_db)):
     db.add(pereval)
     db.commit()
     db.refresh(pereval)
-    return PerevalResponse(id=pereval.id, data_added=pereval.date_added, raw_data=pereval.raw_data,
-                           images=pereval.images, moder_status=pereval.moder_status)
+    return pereval
