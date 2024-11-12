@@ -36,6 +36,13 @@ def test_get(db: Session = Depends(get_db)):
     tests = db.query(TestTable).all()
     return tests
 
+@test.get('/test/{id}')
+def test_item_get(id: int, db: Session = Depends(get_db)):
+    item = db.query(TestTable).filter(TestTable.id == id).first()
+    if item:
+        return item
+
+    return {'item': id, 'message': 'Item not found'}
 
 @test.post('/ittest')
 def test_post(test: TestSchema, db: Session = Depends(get_db)):
