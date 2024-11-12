@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-
 load_dotenv()
 login = os.environ.get('FSTR_DB_LOGIN')
 passwd = os.environ.get('FSTR_DB_PASS')

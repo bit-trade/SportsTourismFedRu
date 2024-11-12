@@ -1,12 +1,12 @@
 from connect import engine
-from models import BaseModel
+from models import ModelBase
 
 
 def drop_tables():
-    BaseModel.metadata.drop_all(bind=engine)
+    ModelBase.metadata.drop_all(bind=engine)
 
 def create_tables():
-    BaseModel.metadata.create_all(bind=engine)
+    ModelBase.metadata.create_all(bind=engine)
 
 
 if __name__ == '__main__':

@@ -19,8 +19,8 @@ class PassGet(BaseModel):
 
 
 class PassAdded(PassGet):
-    raw_data: Union[str, dict[str, str]]
-    images: Union[str, dict[str, str]]
+    raw_data: dict[str, str]
+    images: dict[str, str]
 
     class Config:
         from_attributes = True
@@ -54,3 +54,18 @@ class SprActivTypesResponse(BaseModel):
 class PassImagesAdd(BaseModel):
     pass
 
+
+class ItemEnum(str, Enum):
+    new = 'new'
+    old = 'old'
+    used = 'used'
+
+
+class TestSchema(BaseModel):
+    title: str = Field(max_length=50)
+    description: Union[str, None] = Field(default=' ')
+    data_stamp: Union[str, datetime] = datetime.now()
+    status: Union[str, ItemEnum] = ItemEnum.new
+
+    class Config:
+        from_attributes = True
