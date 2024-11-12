@@ -1,39 +1,37 @@
 from enum import Enum
-from typing import Any, Dict
+from typing import Any, Dict, Union
+
 from datetime import datetime
 from pydantic import BaseModel, Json, Field
 
 
-class ModerStatus(Enum):
+class ModerStatus(str, Enum):
     new = 'new'
     pending = 'pending'
     accepted = 'accepted'
     rejected = 'rejected'
 
 
-class PerevalCreate(BaseModel):
-    raw_data: Json[Dict]
-    images: Json[Dict]
-    moder_status: ModerStatus = ModerStatus.new
+class PassGet(BaseModel):
+    id: int | None
+    data_added: Union[str, datetime] = datetime.now()
+    moder_status: Union[str, ModerStatus]  = ModerStatus.new
 
 
-class PerevalResponse(BaseModel):
-    id: int
-    data_added: datetime
-    raw_data: Json[Dict]
-    images: Json[Dict]
-    moder_status: ModerStatus = ModerStatus.new
+class PassAdded(PassGet):
+    raw_data: Union[str, dict[str, str]]
+    images: Union[str, dict[str, str]]
 
     class Config:
         from_attributes = True
 
 
-class PerevalAreasAdd(BaseModel):
+class PasslAreasAdd(BaseModel):
     title: str = Field(max_length=80)
     id_parent: int
 
 
-class PerevalAreasResponse(BaseModel):
+class PassAreasResponse(BaseModel):
     id: int
     title: str
     id_parent: int
@@ -53,6 +51,6 @@ class SprActivTypesResponse(BaseModel):
     class Config:
         from_attributes = True
 
-class PerevalImagesAdd(BaseModel):
+class PassImagesAdd(BaseModel):
     pass
 
