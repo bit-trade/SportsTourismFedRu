@@ -8,3 +8,4 @@ requirements-*
 .venv
 env/
 venv/
+test.py

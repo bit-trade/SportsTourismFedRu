@@ -1,54 +1,25 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
-from core.schemas import PassGet, PassAdded, TestSchema
+from core.schemas import PassGet, PassAdded
 from database.connect import get_db
-from database.models import  PerevalAdded, TestTable
+from database.models import  PerevalAdded
 
-# pereval = FastAPI()
-
-
-# @pereval.get("/")
-# async def get_home(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-#     passages = db.query(PerevalAdded).offset(skip).limit(limit).all()
-#     if passages:
-#         return passages
-#     else:
-#         return {'message': 'информация в базе отсутствует'}
-#
-# @pereval.post('/pereval/')
-# async def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
-#     pereval = PassAdded(raw_data=passage.raw_data, images=passage.images)
-#     db.add(pereval)
-#     db.commit()
-#     db.refresh(pereval)
-#     return pereval
+pereval = FastAPI()
 
 
-test = FastAPI()
+@pereval.get('/')
+async def get_home(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    passages = db.query(PerevalAdded).offset(skip).limit(limit).all()
+    if passages:
+        return passages
+    else:
+        return {'message': 'информация в базе отсутствует'}
 
-
-@test.get('/')
-def test_home():
-    return {'id': 0, 'server': 'OK', 'message': 'Hi there and everyone'}
-
-@test.get('/tests')
-def test_get(db: Session = Depends(get_db)):
-    tests = db.query(TestTable).all()
-    return tests
-
-@test.get('/test/{id}')
-def test_item_get(id: int, db: Session = Depends(get_db)):
-    item = db.query(TestTable).filter(TestTable.id == id).first()
-    if item:
-        return item
-
-    return {'item': id, 'message': 'Item not found'}
-
-@test.post('/ittest')
-def test_post(test: TestSchema, db: Session = Depends(get_db)):
-    item = TestTable(title=test.title, description=test.description, status=test.status)
-    db.add(item)
+@pereval.post('/pereval/')
+async def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
+    pereval = PerevalAdded(raw_data=passage.raw_data, images=passage.images, moder_status=passage.moder_status)
+    db.add(pereval)
     db.commit()
-    db.refresh(item)
-    return item
+    db.refresh(pereval)
+    return pereval
 

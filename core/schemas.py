@@ -19,8 +19,8 @@ class PassGet(BaseModel):
 
 
 class PassAdded(PassGet):
-    raw_data: dict[str, str]
-    images: dict[str, str]
+    raw_data: str
+    images: str
 
     class Config:
         from_attributes = True
