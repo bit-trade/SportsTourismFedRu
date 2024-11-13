@@ -1,7 +1,8 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, Text, JSON
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, LargeBinary
+from sqlalchemy.types import JSON
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.dialects.postgresql import JSONB, ENUM as PgEnum
+from sqlalchemy.dialects.postgresql import ENUM as PgEnum
 from enum import Enum
 
 
@@ -19,8 +20,8 @@ class PerevalAdded(ModelBase):
     __tablename__ = 'pereval_added'
     id = Column(Integer, primary_key=True, index=True)
     date_added = Column(DateTime, default=datetime.now)
-    raw_data = Column(Text)
-    images = Column(Text)
+    raw_data = Column(JSON, nullable=True)
+    images = Column(JSON, nullable=True)
     moder_status = Column(PgEnum(StatusPass, name='moderation_status'), nullable=False, default=StatusPass.new)
 
 
@@ -44,18 +45,4 @@ class SprActivitiesTypes(ModelBase):
     id = Column(Integer, primary_key=True)
     title = Column(String(20))
 
-
-class EnumTest(Enum):
-    new = 'new'
-    old = 'old'
-    used = 'used'
-
-
-class TestTable(ModelBase):
-    __tablename__ = 'test_table'
-    id = Column(Integer, primary_key=True)
-    title = Column(String(50))
-    description = Column(Text, nullable=True, default=' ')
-    data_stamp = Column(DateTime, default=datetime.now)
-    status = Column(PgEnum(EnumTest, name='item_status'), default=EnumTest.new, nullable=False)
 

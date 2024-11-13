@@ -1,3 +1,4 @@
+from typing import Annotated
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from core.schemas import PassGet, PassAdded
@@ -8,7 +9,7 @@ pereval = FastAPI()
 
 
 @pereval.get('/')
-async def get_home(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def get_home(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     passages = db.query(PerevalAdded).offset(skip).limit(limit).all()
     if passages:
         return passages
@@ -16,7 +17,7 @@ async def get_home(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)
         return {'message': 'информация в базе отсутствует'}
 
 @pereval.post('/pereval/')
-async def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
+def submit_data(passage: Annotated[PassAdded, Depends()], db: Session = Depends(get_db)):
     pereval = PerevalAdded(raw_data=passage.raw_data, images=passage.images, moder_status=passage.moder_status)
     db.add(pereval)
     db.commit()

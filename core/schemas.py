@@ -1,7 +1,6 @@
 from enum import Enum
-from typing import Any, Dict, Union
-
 from datetime import datetime
+from typing import Any, Dict, Union
 from pydantic import BaseModel, Json, Field
 
 
@@ -13,14 +12,13 @@ class ModerStatus(str, Enum):
 
 
 class PassGet(BaseModel):
-    id: int | None
     data_added: Union[str, datetime] = datetime.now()
     moder_status: Union[str, ModerStatus]  = ModerStatus.new
 
 
 class PassAdded(PassGet):
-    raw_data: str
-    images: str
+    raw_data: Union[Dict[str, dict[str, str]], Json]
+    images: Union[list[Dict], Json]
 
     class Config:
         from_attributes = True
@@ -53,19 +51,3 @@ class SprActivTypesResponse(BaseModel):
 
 class PassImagesAdd(BaseModel):
     pass
-
-
-class ItemEnum(str, Enum):
-    new = 'new'
-    old = 'old'
-    used = 'used'
-
-
-class TestSchema(BaseModel):
-    title: str = Field(max_length=50)
-    description: Union[str, None] = Field(default=' ')
-    data_stamp: Union[str, datetime] = datetime.now()
-    status: Union[str, ItemEnum] = ItemEnum.new
-
-    class Config:
-        from_attributes = True
