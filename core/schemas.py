@@ -1,8 +1,8 @@
 import json
 from enum import Enum
 from datetime import datetime
-from typing import Any, List, Dict, Union
-from pydantic import BaseModel, Json, Field, JsonValue
+from typing import Any, Dict, Union
+from pydantic import BaseModel, Json, Field
 
 
 class ModerStatus(str, Enum):
