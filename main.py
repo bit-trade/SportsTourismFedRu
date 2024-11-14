@@ -1,7 +1,6 @@
-from typing import Annotated
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from core.schemas import PassGet, PassAdded
+from core.schemas import PassAdded
 from database.connect import get_db
 from database.models import  PerevalAdded
 
@@ -16,7 +15,7 @@ def get_home(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     else:
         return {'message': 'информация в базе отсутствует'}
 
-@pereval.post('/pereval/')
+@pereval.post('/submitData')
 def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
     pereval = PerevalAdded(raw_data=passage.raw_data, images=passage.images, moder_status=passage.moder_status)
     db.add(pereval)
@@ -24,3 +23,11 @@ def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
     db.refresh(pereval)
     return pereval
 
+
+@pereval.get('/submitData/{pass_id}')
+def get_pass(pass_id: int, db: Session = Depends(get_db)):
+    pereval = db.get(PerevalAdded, pass_id)
+    if not pereval:
+        raise HTTPException(status_code=404, detail="Passage not found")
+
+    return pereval
