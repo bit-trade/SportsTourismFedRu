@@ -17,7 +17,7 @@ def get_home(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
         return {'message': 'информация в базе отсутствует'}
 
 @pereval.post('/pereval/')
-def submit_data(passage: Annotated[PassAdded, Depends()], db: Session = Depends(get_db)):
+def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
     pereval = PerevalAdded(raw_data=passage.raw_data, images=passage.images, moder_status=passage.moder_status)
     db.add(pereval)
     db.commit()

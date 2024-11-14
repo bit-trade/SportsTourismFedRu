@@ -1,7 +1,8 @@
+import json
 from enum import Enum
 from datetime import datetime
-from typing import Any, Dict, Union
-from pydantic import BaseModel, Json, Field
+from typing import Any, List, Dict, Union
+from pydantic import BaseModel, Json, Field, JsonValue
 
 
 class ModerStatus(str, Enum):
@@ -17,8 +18,8 @@ class PassGet(BaseModel):
 
 
 class PassAdded(PassGet):
-    raw_data: Union[Dict[str, dict[str, str]], Json]
-    images: Union[list[Dict], Json]
+    raw_data: Union[Dict[str, Any], Json] = None
+    images: Union[list[Dict], Json] = None
 
     class Config:
         from_attributes = True
