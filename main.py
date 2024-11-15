@@ -1,8 +1,8 @@
 from typing import Annotated
-
 from fastapi import FastAPI, Depends, HTTPException
+from pydantic import Field
 from sqlalchemy.orm import Session
-from core.schemas import PassAdded
+from core.schemas import PassAdded, PassUpdate
 from database.connect import get_db
 from database.models import PerevalAdded, StatusPass
 
@@ -17,6 +17,7 @@ def get_home(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     else:
         return {'message': 'информация в базе отсутствует'}
 
+
 @pereval.post('/submitData')
 def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
     pereval = PerevalAdded(raw_data=passage.raw_data, images=passage.images)
@@ -24,6 +25,7 @@ def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(pereval)
     return pereval
+
 
 @pereval.get('/submitData/{pass_id}')
 def get_pass(pass_id: int, db: Session = Depends(get_db)):
@@ -33,8 +35,9 @@ def get_pass(pass_id: int, db: Session = Depends(get_db)):
 
     return pereval
 
+
 @pereval.patch('/submitData/{pass_id}')
-def update_pass(pass_id: int, passage: Annotated[PassAdded, Depends()] , db: Session = Depends(get_db)):
+def update_pass(pass_id: int, passage: Annotated[PassUpdate, Depends()], db: Session = Depends(get_db)):
     pereval = db.get(PerevalAdded, pass_id)
     if not pereval:
         raise HTTPException(status_code=404, detail="запись не найдена")
@@ -48,4 +51,3 @@ def update_pass(pass_id: int, passage: Annotated[PassAdded, Depends()] , db: Ses
         return [pereval, {'state': 1}]
     else:
         return {'state': 0, 'message': 'статус записи не соответствует значению new'}
-
