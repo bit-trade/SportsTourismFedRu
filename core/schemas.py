@@ -1,9 +1,6 @@
-import json
 from enum import Enum
-from datetime import datetime
 from typing import Any, Dict, Union
-from pydantic import BaseModel, Json, Field
-
+from pydantic import BaseModel, Json
 
 class ModerStatus(str, Enum):
     new = 'new'
@@ -13,7 +10,6 @@ class ModerStatus(str, Enum):
 
 
 class PassGet(BaseModel):
-    data_added: Union[str, datetime] = datetime.now()
     moder_status: Union[str, ModerStatus]  = ModerStatus.new
 
 
@@ -24,31 +20,3 @@ class PassAdded(PassGet):
     class Config:
         from_attributes = True
 
-
-class PasslAreasAdd(BaseModel):
-    title: str = Field(max_length=80)
-    id_parent: int
-
-
-class PassAreasResponse(BaseModel):
-    id: int
-    title: str
-    id_parent: int
-
-    class Config:
-        from_attributes = True
-
-
-class SprActivTypesAdd(BaseModel):
-    title: str = Field(max_length=20)
-
-
-class SprActivTypesResponse(BaseModel):
-    id: int
-    title: str
-
-    class Config:
-        from_attributes = True
-
-class PassImagesAdd(BaseModel):
-    pass

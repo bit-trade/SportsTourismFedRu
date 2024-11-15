@@ -37,17 +37,15 @@ def get_pass(pass_id: int, db: Session = Depends(get_db)):
 def update_pass(pass_id: int, passage: Annotated[PassAdded, Depends()] , db: Session = Depends(get_db)):
     pereval = db.get(PerevalAdded, pass_id)
     if not pereval:
-        raise HTTPException(status_code=404, detail="Passage not found")
-
-    print('\n', pereval, type(pereval), '\n')
-    print(f'raw_data is {pereval.raw_data}' , type(pereval.raw_data), '\n')
-    print(f'moder_status is {pereval.moder_status}', type(pereval.moder_status), '\n')
+        raise HTTPException(status_code=404, detail="запись не найдена")
 
     if pereval.moder_status == StatusPass.new:
-        pereval = PerevalAdded(date_added=passage.data_added, raw_data=passage.raw_data,
-                               images=passage.images, moder_status=passage.moder_status)
-        db.add(pereval) # !!!!
+        pereval.moder_status = passage.moder_status
+        pereval.raw_data = passage.raw_data
+        pereval.images = passage.images
         db.commit()
         db.refresh(pereval)
-        return pereval
+        return [pereval, {'state': 1}]
+    else:
+        return {'state': 0, 'message': 'статус записи не соответствует значению new'}
 

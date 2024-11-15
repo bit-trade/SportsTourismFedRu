@@ -1,9 +1,9 @@
+from enum import Enum
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, LargeBinary
 from sqlalchemy.types import JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ENUM as PgEnum
-from enum import Enum
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary
 
 
 ModelBase = declarative_base()
