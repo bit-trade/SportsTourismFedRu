@@ -37,7 +37,7 @@ def get_pass(pass_id: int, db: Session = Depends(get_db)):
 
 
 @pereval.patch('/submitData/{pass_id}')
-def update_pass(pass_id: int, passage: Annotated[PassUpdate, Depends()], db: Session = Depends(get_db)):
+def update_pass(pass_id: int, passage: PassUpdate, db: Session = Depends(get_db)):
     pereval = db.get(PerevalAdded, pass_id)
     if not pereval:
         raise HTTPException(status_code=404, detail="запись не найдена")

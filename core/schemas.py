@@ -31,12 +31,52 @@ user = {
 
 
 class PassUpdate(BaseModel):
-    moder_status: Union[str, ModerStatus] = Field(default=ModerStatus.accepted)
-    raw_data: Union[Dict[str, Any], Json] = None
-    user: Union[Dict[str, Any], Json] = Field(default=user, frozen=True)
-    coords: Union[Dict[str, Any], Json] = Field(default=None)
-    level: Union[Dict[str, Any], Json] = Field(default=None)
-    images: Union[list[Dict], Json] = None
+    moder_status: Union[str, ModerStatus] = ModerStatus.accepted
+    basic_info: Union[Dict[str, Any], None] = None
+    coords: Union[Dict[str, Any], None] = None
+    level: Union[Dict[str, Any], None] = None
+    images: Union[list[Dict], None] = None
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True,
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "basic_info": {
+                        "beautyTitle": "пер. ",
+                        "title": "Пхия",
+                        "other_titles": "Триев",
+                        "connect": "",
+                        "add_time": "2021-09-22 13:18:13"
+                    },
+                    "user": {
+                        "email": "user@email.tld",
+                        "phone": "79031234567",
+                        "fam": "Иванов",
+                        "name": "Василий",
+                        "otc": "Иванович"
+                    },
+                    "coords": {
+                        "latitude": "45.3842",
+                        "longitude": "7.1525",
+                        "height": "1200"
+                    },
+                    "level": {
+                        "winter": "",
+                        "summer": "1А",
+                        "autumn": "1А",
+                        "spring": ""
+                    },
+                    "images": [
+                        {
+                            "id": 1,
+                            "title": "Седловина"
+                        },
+                        {
+                            "id": 2,
+                            "title": "Подъем"
+                        }]
+                }
+            ]
+        }
+    }
