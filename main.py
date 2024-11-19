@@ -42,9 +42,10 @@ def update_pass(pass_id: int, passage: PassUpdate, db: Session = Depends(get_db)
     if not pereval:
         raise HTTPException(status_code=404, detail="запись не найдена")
 
-    if pereval.moder_status == StatusPass.new:
+    if pereval.moder_status.value == 'new':
         pereval.moder_status = passage.moder_status
         raw_data = passage.basic_info
+        # raw_data["user"] =
         raw_data["coords"] = passage.coords
         raw_data["level"] = passage.level
         pereval.raw_data = raw_data
@@ -53,4 +54,22 @@ def update_pass(pass_id: int, passage: PassUpdate, db: Session = Depends(get_db)
         db.refresh(pereval)
         return [pereval, {'state': 1}]
     else:
-        return {'state': 0, 'message': 'статус записи не соответствует значению new'}
+        return {'state': 0, 'message': f'статус записи - {pereval.moder_status.value}'}
+
+@pereval.get('/submitData/user_email/{email}')
+def pass_user_email(email: str, db: Session = Depends(get_db)):
+    passages = db.query(PerevalAdded).all()
+    if passages:
+        for passage in passages:
+            if 'user' in passage.raw_data.keys():
+                if isinstance(passage.raw_data['user'], dict):
+                    print(passage.id, '\n')
+                    if email in passage.raw_data['user']['email']:
+                        print(passage, passage.raw_data, passage.raw_data['user']['email'], sep='\n')
+                        print('')
+
+        return passages
+    else:
+        return {'message': 'информация в базе отсутствует'}
+
+
