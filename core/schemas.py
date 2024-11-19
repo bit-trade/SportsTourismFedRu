@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Any, Dict, Union
-from pydantic import BaseModel, Json, Field
+from pydantic import BaseModel, Json
 
 class ModerStatus(str, Enum):
     new = 'new'
@@ -21,15 +21,6 @@ class PassAdded(PassGet):
         from_attributes = True
 
 
-user = {
-    "email": "user@email.tld",
-    "phone": "79031234567",
-    "fam": "ПупкинПупкин",
-    "name": "Василий",
-    "otc": "Иванович"
-}
-
-
 class PassUpdate(BaseModel):
     moder_status: Union[str, ModerStatus] = ModerStatus.accepted
     basic_info: Union[Dict[str, Any], None] = None
@@ -42,19 +33,13 @@ class PassUpdate(BaseModel):
         "json_schema_extra": {
             "examples": [
                 {
+                    "moder_status": "accepted",
                     "basic_info": {
                         "beautyTitle": "пер. ",
                         "title": "Пхия",
                         "other_titles": "Триев",
                         "connect": "",
                         "add_time": "2021-09-22 13:18:13"
-                    },
-                    "user": {
-                        "email": "user@email.tld",
-                        "phone": "79031234567",
-                        "fam": "Иванов",
-                        "name": "Василий",
-                        "otc": "Иванович"
                     },
                     "coords": {
                         "latitude": "45.3842",

@@ -44,7 +44,10 @@ def update_pass(pass_id: int, passage: PassUpdate, db: Session = Depends(get_db)
 
     if pereval.moder_status == StatusPass.new:
         pereval.moder_status = passage.moder_status
-        pereval.raw_data = passage.raw_data
+        raw_data = passage.basic_info
+        raw_data["coords"] = passage.coords
+        raw_data["level"] = passage.level
+        pereval.raw_data = raw_data
         pereval.images = passage.images
         db.commit()
         db.refresh(pereval)
