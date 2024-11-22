@@ -1,10 +1,8 @@
-from typing import Annotated
-from fastapi import FastAPI, Depends, HTTPException
-from pydantic import Field
 from sqlalchemy.orm import Session
-from core.schemas import PassAdded, PassUpdate
 from database.connect import get_db
-from database.models import PerevalAdded, StatusPass
+from database.models import PerevalAdded
+from core.schemas import PassAdded, PassUpdate
+from fastapi import FastAPI, Depends, HTTPException
 
 pereval = FastAPI()
 
