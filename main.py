@@ -31,7 +31,7 @@ def submit_data(passage: PassAdded, db: Session = Depends(get_db)):
 def get_pass(pass_id: int, db: Session = Depends(get_db)):
     pereval = db.get(PerevalAdded, pass_id)
     if not pereval:
-        raise HTTPException(status_code=404, detail="Passage not found")
+        raise HTTPException(status_code=404, detail='Passage not found')
 
     return pereval
 
@@ -40,14 +40,15 @@ def get_pass(pass_id: int, db: Session = Depends(get_db)):
 def update_pass(pass_id: int, passage: PassUpdate, db: Session = Depends(get_db)):
     pereval = db.get(PerevalAdded, pass_id)
     if not pereval:
-        raise HTTPException(status_code=404, detail="запись не найдена")
+        raise HTTPException(status_code=404, detail='запись не найдена')
 
     if pereval.moder_status.value == 'new':
         pereval.moder_status = passage.moder_status
         raw_data = passage.basic_info
-        # raw_data["user"] =
-        raw_data["coords"] = passage.coords
-        raw_data["level"] = passage.level
+        if 'user' in pereval.raw_data.keys():
+            raw_data['user'] = pereval.raw_data['user']
+        raw_data['coords'] = passage.coords
+        raw_data['level'] = passage.level
         pereval.raw_data = raw_data
         pereval.images = passage.images
         db.commit()
@@ -60,15 +61,18 @@ def update_pass(pass_id: int, passage: PassUpdate, db: Session = Depends(get_db)
 def pass_user_email(email: str, db: Session = Depends(get_db)):
     passages = db.query(PerevalAdded).all()
     if passages:
+        result = list()
         for passage in passages:
             if 'user' in passage.raw_data.keys():
                 if isinstance(passage.raw_data['user'], dict):
-                    print(passage.id, '\n')
                     if email in passage.raw_data['user']['email']:
-                        print(passage, passage.raw_data, passage.raw_data['user']['email'], sep='\n')
-                        print('')
+                        result.append(passage)
 
-        return passages
+        if result:
+            return result
+        else:
+            return {'message': f'записи в поле user с адресом {email} не найдено'}
+
     else:
         return {'message': 'информация в базе отсутствует'}
 
